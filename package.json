@@ -1,0 +1,14 @@
+{
+  "name": "pantera",
+  "version": "1.0.0",
+  "description": "An HTTP request client that provides an axios like interface over top of node-fetch. Super lightweight. Supports interceptors and multiple instances.",
+  "main": "src/index.ts",
+  "scripts": {
+    "build": "tsc"
+  },
+  "author": "Spicy Sparks",
+  "license": "ISC",
+  "devDependencies": {
+    "typescript": "^4.8.2"
+  }
+}
