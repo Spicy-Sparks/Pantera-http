@@ -61,43 +61,43 @@ export class Pantera {
     }
   }
 
-  public get = (url: string, config: PanteraConfig) => this.request({
+  public get = <T = any>(url: string, config: PanteraConfig) => this.request<T>({
     method: 'get',
     url: url,
     ...config
   })
 
-  public post = (url: string, config: PanteraConfig) => this.request({
+  public post = <T = any>(url: string, config: PanteraConfig) => this.request<T>({
     method: 'post',
     url: url,
     ...config
   })
 
-  public put = (url: string, config: PanteraConfig) => this.request({
+  public put = <T = any>(url: string, config: PanteraConfig) => this.request<T>({
     method: 'put',
     url: url,
     ...config
   })
 
-  public patch = (url: string, config: PanteraConfig) => this.request({
+  public patch = <T = any>(url: string, config: PanteraConfig) => this.request<T>({
     method: 'patch',
     url: url,
     ...config
   })
 
-  public delete = (url: string, config: PanteraConfig) => this.request({
+  public delete = <T = any>(url: string, config: PanteraConfig) => this.request<T>({
     method: 'delete',
     url: url,
     ...config
   })
 
-  public options = (url: string, config: PanteraConfig) => this.request({
+  public options = <T = any>(url: string, config: PanteraConfig) => this.request<T>({
     method: 'options',
     url: url,
     ...config
   })
 
-  public head = (url: string, config: PanteraConfig) => this.request({
+  public head = <T = any>(url: string, config: PanteraConfig) => this.request<T>({
     method: 'head',
     url: url,
     ...config

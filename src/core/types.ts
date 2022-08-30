@@ -15,6 +15,6 @@ export type PanteraRequestInterceptors = {
 }
 
 export type PanteraResponseInterceptors = {
-  onSuccess: <T>(response: PantersResponse<T>) => PantersResponse<T> | Promise<PantersResponse<T>>
-  onError: <T>(error: Response | Error) => PantersResponse<T> | Promise<PantersResponse<T>>
+  onSuccess: <T = any>(response: PantersResponse<T>) => PantersResponse<T> | Promise<PantersResponse<T>>
+  onError: <T = any>(error: Response | Error) => PantersResponse<T> | Promise<PantersResponse<T>>
 }
