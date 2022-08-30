@@ -34,7 +34,6 @@
     "android",
     "ios",
     "build",
-    "dist",
-    "electron-build"
+    "dist"
   ]
 }
