@@ -43,7 +43,9 @@ export class Pantera {
 
       const response: PantersResponse<T> = {
         ...res,
-        data: await res.json() as T
+        data: finalConfig.responseType === 'json'
+          ? await res.json() as T
+          : await res.text() as T
       }
 
       if(this.responseInterceptor)

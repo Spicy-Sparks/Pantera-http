@@ -2,9 +2,12 @@ export type PantersResponse<T> = Response & {
   data: T
 }
 
+export type ResponseType = 'json' | 'text'
+
 export type PanteraConfig = RequestInit & {
   baseUrl?: string,
-  url?: string
+  url?: string,
+  responseType?: ResponseType
 }
 
 export type PanteraRequestInterceptors = {
