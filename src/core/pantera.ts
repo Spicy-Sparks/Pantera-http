@@ -4,7 +4,10 @@ import {
   PantersResponse,
   PanteraRequestInterceptors
 } from './types'
-import { mergeConfig } from './config'
+import {
+  mergeConfig,
+  mergeUrl
+} from './config'
 
 export class Pantera {
 
@@ -26,8 +29,10 @@ export class Pantera {
     if(this.requestInterceptor)
       finalConfig = await this.requestInterceptor.onBeforeSend(config)
 
+    const finalUrl = mergeUrl(finalConfig.url || '', finalConfig.baseUrl)
+
     try {
-      const res = await fetch("ciao", finalConfig)
+      const res = await fetch(finalUrl, finalConfig)
 
       if(!res.ok) {
         if(this.responseInterceptor)

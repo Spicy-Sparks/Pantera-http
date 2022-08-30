@@ -14,3 +14,20 @@ export const mergeConfig = (
     })
   }
 }
+
+export const mergeUrl = (
+  url: string,
+  baseUrl?: string
+): string => {
+
+  if(!baseUrl)
+    return url
+
+  if(baseUrl.endsWith('/'))
+    baseUrl = baseUrl.slice(0, -1)
+
+  if(!url.startsWith('/'))
+    url = '/' + url
+
+  return baseUrl + url
+}
