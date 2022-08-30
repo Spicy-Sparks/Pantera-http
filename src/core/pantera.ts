@@ -61,6 +61,48 @@ export class Pantera {
     }
   }
 
+  public get = (url: string, config: PanteraConfig) => this.request({
+    method: 'get',
+    url: url,
+    ...config
+  })
+
+  public post = (url: string, config: PanteraConfig) => this.request({
+    method: 'post',
+    url: url,
+    ...config
+  })
+
+  public put = (url: string, config: PanteraConfig) => this.request({
+    method: 'put',
+    url: url,
+    ...config
+  })
+
+  public patch = (url: string, config: PanteraConfig) => this.request({
+    method: 'patch',
+    url: url,
+    ...config
+  })
+
+  public delete = (url: string, config: PanteraConfig) => this.request({
+    method: 'delete',
+    url: url,
+    ...config
+  })
+
+  public options = (url: string, config: PanteraConfig) => this.request({
+    method: 'options',
+    url: url,
+    ...config
+  })
+
+  public head = (url: string, config: PanteraConfig) => this.request({
+    method: 'head',
+    url: url,
+    ...config
+  })
+
   private bindRequestInterceptor = (
     onBeforeSend: PanteraRequestInterceptors['onBeforeSend']
   ) => {
