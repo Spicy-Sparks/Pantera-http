@@ -9,6 +9,7 @@ export type PanteraConfig = Omit<RequestInit, "headers"> & {
   url?: string,
   responseType?: ResponseType,
   headers?: PanteraHeaders,
+  body?: any,
   extraConfig?: {
     [key: string]: string | number | null | undefined
   }
