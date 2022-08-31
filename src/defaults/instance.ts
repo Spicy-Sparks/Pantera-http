@@ -1,6 +1,6 @@
-import { Pantera } from './pantera'
+import { Pantera } from '../core/pantera'
 
-export const defaultInstance = new Pantera({
+export const instance = new Pantera({
   responseType: 'json',
   headers: {
     'Content-Type': 'application/x-www-form-urlencoded'

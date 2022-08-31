@@ -4,12 +4,13 @@ import {
   PanteraRequestInterceptors,
   PanteraResponse,
   PanteraError
-} from './types'
+} from '../types'
 import {
   mergeConfig,
   mergeUrl,
   parseHeaders
-} from './config'
+} from '../utils/config'
+import { errorToObject } from '../utils/errors'
 
 export class Pantera {
 
@@ -74,7 +75,7 @@ export class Pantera {
     }
     catch (err: any) {
       const error: PanteraError<T> = {
-        ...err,
+        ...errorToObject(err),
         config: finalConfig
       }
 

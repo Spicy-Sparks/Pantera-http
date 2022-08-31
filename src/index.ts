@@ -1,8 +1,8 @@
 import { Pantera } from './core/pantera'
-import { defaultInstance } from './core/default'
+import { instance } from './defaults/instance'
 
-export * from './core/types'
+export * from './types'
 
 export { Pantera }
 
-export default defaultInstance
+export default instance

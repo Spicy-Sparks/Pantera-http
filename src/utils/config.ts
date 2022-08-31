@@ -1,4 +1,4 @@
-import { PanteraConfig, PanteraHeaders } from './types'
+import { PanteraConfig, PanteraHeaders } from '../types'
 
 export const mergeConfig = (
   config1: PanteraConfig,
@@ -35,7 +35,7 @@ export const mergeUrl = (
 export const parseHeaders = (
   headers: HeadersInit
 ): PanteraHeaders => {
-  
+
   const entries = headers.entries
   if(typeof entries === 'string')
     return {}
