@@ -9,6 +9,7 @@ import {
   mergeConfig,
   mergeUrl
 } from '../utils/config'
+import { parseBody } from '../utils/body'
 import { errorToObject } from '../utils/errors'
 
 export class Pantera {
@@ -36,6 +37,7 @@ export class Pantera {
     try {
       const res = await fetch(finalUrl, {
         ...finalConfig,
+        body: parseBody(finalConfig),
         // @ts-ignore
         headers: new Headers(finalConfig.headers)
       })
