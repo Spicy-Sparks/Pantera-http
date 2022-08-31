@@ -1,7 +1,7 @@
 export type ResponseType = 'json' | 'text'
 
 export type PanteraHeaders = {
-  [key: string]: string | number | null | undefined
+  [key: string]: string | number | boolean | null | undefined
 }
 
 export type PanteraConfig = Omit<Omit<RequestInit, "body">, "headers"> & {
@@ -11,7 +11,7 @@ export type PanteraConfig = Omit<Omit<RequestInit, "body">, "headers"> & {
   headers?: PanteraHeaders,
   body?: any,
   extraConfig?: {
-    [key: string]: string | number | null | undefined
+    [key: string]: string | number | boolean | null | undefined
   }
 }
 
