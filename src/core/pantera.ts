@@ -7,8 +7,7 @@ import {
 } from '../types'
 import {
   mergeConfig,
-  mergeUrl,
-  parseHeaders
+  mergeUrl
 } from '../utils/config'
 import { errorToObject } from '../utils/errors'
 
@@ -45,7 +44,7 @@ export class Pantera {
         ? await res.json() as T
         : await res.text() as unknown as T
 
-      const headers = parseHeaders(res.headers)
+      const headers = Object.fromEntries(res.headers.entries())
 
       if(!res.ok) {
         const error: PanteraError<T> = {
