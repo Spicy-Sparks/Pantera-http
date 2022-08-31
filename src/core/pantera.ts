@@ -41,8 +41,11 @@ export class Pantera {
       })
 
       if(!res.ok) {
-        const error: PanteraError = {
+        const error: PanteraError<T> = {
           ...res,
+          data: finalConfig.responseType === 'json'
+            ? await res.json() as T
+            : await res.text() as T,
           headers: parseHeaders(res.headers),
           config: finalConfig
         }
@@ -68,7 +71,7 @@ export class Pantera {
       return Promise.resolve(response)
     }
     catch (err: any) {
-      const error: PanteraError = {
+      const error: PanteraError<T> = {
         ...err,
         config: finalConfig
       }

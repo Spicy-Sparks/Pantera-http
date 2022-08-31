@@ -17,8 +17,9 @@ export type PanteraResponse<T> = Omit<Response, "headers"> & {
   headers?: PanteraHeaders
 }
 
-export type PanteraError = (Error | Omit<Response, "headers">) & {
+export type PanteraError<T> = (Partial<Error> | Partial<Omit<Response, "headers">>) & {
   config: PanteraConfig,
+  data?: T,
   headers?: PanteraHeaders
 }
 
@@ -28,5 +29,5 @@ export type PanteraRequestInterceptors = {
 
 export type PanteraResponseInterceptors = {
   onSuccess: <T = any>(response: PanteraResponse<T>) => PanteraResponse<T> | Promise<PanteraResponse<T>>
-  onError: <T = any>(error: PanteraError) => PanteraResponse<T> | Promise<PanteraResponse<T>>
+  onError: <T = any>(error: PanteraError<T>) => PanteraResponse<T> | Promise<PanteraResponse<T>>
 }
