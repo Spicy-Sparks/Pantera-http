@@ -10,6 +10,9 @@ export type PanteraConfig = Omit<Omit<RequestInit, "body">, "headers"> & {
   responseType?: ResponseType,
   headers?: PanteraHeaders,
   body?: any,
+  params?: {
+    [key: string]: string | number | boolean | null | undefined
+  },
   extraConfig?: {
     [key: string]: string | number | boolean | null | undefined
   }

@@ -9,7 +9,8 @@ import {
   mergeConfig,
   mergeUrl
 } from '../utils/config'
-import { parseBody } from '../utils/body'
+import { transformBody } from '../transform/body'
+import { transformUrl } from '../transform/url'
 import { errorToObject } from '../utils/errors'
 
 export class Pantera {
@@ -32,12 +33,10 @@ export class Pantera {
     if(this.requestInterceptor)
       finalConfig = await this.requestInterceptor.onBeforeSend(finalConfig)
 
-    const finalUrl = mergeUrl(finalConfig.url || '', finalConfig.baseUrl)
-
     try {
-      const res = await fetch(finalUrl, {
+      const res = await fetch(transformUrl(finalConfig), {
         ...finalConfig,
-        body: parseBody(finalConfig),
+        body: transformBody(finalConfig),
         // @ts-ignore
         headers: new Headers(finalConfig.headers)
       })

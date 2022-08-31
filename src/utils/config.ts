@@ -8,14 +8,24 @@ export const mergeConfig = (
   return {
     ...config1,
     ...config2,
-    headers: {
-      ...config1.headers,
-      ...config2.headers
-    },
-    extraConfig: {
-      ...config1.extraConfig,
-      ...config2.extraConfig
-    }
+    ...((config1.headers || config2.headers) && {
+      headers: {
+        ...config1.headers,
+        ...config2.headers
+      }
+    }),
+    ...((config1.extraConfig || config2.extraConfig) && {
+      extraConfig: {
+        ...config1.extraConfig,
+        ...config2.extraConfig
+      }
+    }),
+    ...((config1.params || config2.params) && {
+      params: {
+        ...config1.params,
+        ...config2.params
+      }
+    })
   }
 }
 
