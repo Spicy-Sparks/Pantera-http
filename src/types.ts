@@ -4,7 +4,7 @@ export type PanteraHeaders = {
   [key: string]: string | number | null | undefined
 }
 
-export type PanteraConfig = Omit<RequestInit, "headers"> & {
+export type PanteraConfig = Omit<Omit<RequestInit, "body">, "headers"> & {
   baseUrl?: string,
   url?: string,
   responseType?: ResponseType,
