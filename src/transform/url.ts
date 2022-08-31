@@ -7,8 +7,7 @@ export const transformUrl = (config: PanteraConfig): string => {
   if(config.params && config.method?.match(/get|head/)) {
     // @ts-ignore
     const urlSearchParams = new URLSearchParams(config.params).toString()
-    console.log(urlSearchParams)
-    return finalUrl + urlSearchParams
+    return `${finalUrl}?${urlSearchParams}`
   }
 
   return finalUrl
