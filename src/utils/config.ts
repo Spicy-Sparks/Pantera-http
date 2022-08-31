@@ -11,6 +11,10 @@ export const mergeConfig = (
     headers: {
       ...config1.headers,
       ...config2.headers
+    },
+    extraConfig: {
+      ...config1.extraConfig,
+      ...config2.extraConfig
     }
   }
 }
