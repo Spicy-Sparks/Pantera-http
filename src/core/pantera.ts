@@ -1,8 +1,9 @@
 import {
   PanteraConfig,
   PanteraResponseInterceptors,
-  PantersResponse,
-  PanteraRequestInterceptors
+  PanteraRequestInterceptors,
+  PanteraResponse,
+  PanteraError
 } from './types'
 import {
   mergeConfig,
@@ -21,7 +22,7 @@ export class Pantera {
     this.baseConfig = config
   }
 
-  public request = async <T = any>(config: PanteraConfig): Promise<PantersResponse<T>> => {
+  public request = async <T = any>(config: PanteraConfig): Promise<PanteraResponse<T>> => {
     let finalConfig = this.baseConfig
       ? mergeConfig(this.baseConfig, config)
       : config
@@ -35,14 +36,20 @@ export class Pantera {
       const res = await fetch(finalUrl, finalConfig)
 
       if(!res.ok) {
+        const error: PanteraError = {
+          ...res,
+          config: finalConfig
+        }
+
         if(this.responseInterceptor)
-          return await this.responseInterceptor.onError(res)
+          return await this.responseInterceptor.onError(error)
 
         return Promise.reject(res)
       }
 
-      const response: PantersResponse<T> = {
+      const response: PanteraResponse<T> = {
         ...res,
+        config: finalConfig,
         data: finalConfig.responseType === 'json'
           ? await res.json() as T
           : await res.text() as T
@@ -54,10 +61,15 @@ export class Pantera {
       return Promise.resolve(response)
     }
     catch (err: any) {
+      const error: PanteraError = {
+        ...err,
+        config: finalConfig
+      }
+      
       if(this.responseInterceptor)
-        return await this.responseInterceptor.onError(err)
+        return await this.responseInterceptor.onError(error)
 
-      return Promise.reject(err)
+      return Promise.reject(error)
     }
   }
 

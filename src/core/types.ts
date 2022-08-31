@@ -1,5 +1,10 @@
-export type PantersResponse<T> = Response & {
+export type PanteraResponse<T> = Response & {
+  config: PanteraConfig,
   data: T
+}
+
+export type PanteraError = (Error | Response) & {
+  config: PanteraConfig,
 }
 
 export type ResponseType = 'json' | 'text'
@@ -15,6 +20,6 @@ export type PanteraRequestInterceptors = {
 }
 
 export type PanteraResponseInterceptors = {
-  onSuccess: <T = any>(response: PantersResponse<T>) => PantersResponse<T> | Promise<PantersResponse<T>>
-  onError: <T = any>(error: Response | Error) => PantersResponse<T> | Promise<PantersResponse<T>>
+  onSuccess: <T = any>(response: PanteraResponse<T>) => PanteraResponse<T> | Promise<PanteraResponse<T>>
+  onError: <T = any>(error: PanteraError) => PanteraResponse<T> | Promise<PanteraResponse<T>>
 }
