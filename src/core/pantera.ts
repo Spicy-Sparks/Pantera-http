@@ -40,13 +40,17 @@ export class Pantera {
         headers: new Headers(finalConfig.headers)
       })
 
+      const data = finalConfig.responseType === 'json'
+        ? await res.json() as T
+        : await res.text() as unknown as T
+
+      const headers = parseHeaders(res.headers)
+
       if(!res.ok) {
         const error: PanteraError<T> = {
           ...res,
-          data: finalConfig.responseType === 'json'
-            ? await res.json() as T
-            : await res.text() as unknown as T,
-          headers: parseHeaders(res.headers),
+          data: data,
+          headers: headers,
           config: finalConfig
         }
 
@@ -59,10 +63,8 @@ export class Pantera {
       const response: PanteraResponse<T> = {
         ...res,
         config: finalConfig,
-        headers: parseHeaders(res.headers),
-        data: finalConfig.responseType === 'json'
-          ? await res.json() as T
-          : await res.text() as T
+        headers: headers,
+        data: data
       }
 
       if(this.responseInterceptor)
