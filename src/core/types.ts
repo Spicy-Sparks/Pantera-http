@@ -11,13 +11,13 @@ export type PanteraConfig = Omit<RequestInit, "headers"> & {
   headers?: PanteraHeaders
 }
 
-export type PanteraResponse<T> = Omit<Response, "headers"> & {
+export type PanteraResponse<T = any> = Omit<Response, "headers"> & {
   config: PanteraConfig,
   data: T,
   headers?: PanteraHeaders
 }
 
-export type PanteraError<T> = (Partial<Error> | Partial<Omit<Response, "headers">>) & {
+export type PanteraError<T = any> = Partial<Error> & Partial<Omit<Response, "headers">> & {
   config: PanteraConfig,
   data?: T,
   headers?: PanteraHeaders
