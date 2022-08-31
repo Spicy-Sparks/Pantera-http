@@ -7,7 +7,8 @@ import {
 } from './types'
 import {
   mergeConfig,
-  mergeUrl
+  mergeUrl,
+  parseHeaders
 } from './config'
 
 export class Pantera {
@@ -33,11 +34,16 @@ export class Pantera {
     const finalUrl = mergeUrl(finalConfig.url || '', finalConfig.baseUrl)
 
     try {
-      const res = await fetch(finalUrl, finalConfig)
+      const res = await fetch(finalUrl, {
+        ...finalConfig,
+        // @ts-ignore
+        headers: new Headers(finalConfig.headers)
+      })
 
       if(!res.ok) {
         const error: PanteraError = {
           ...res,
+          headers: parseHeaders(res.headers),
           config: finalConfig
         }
 
@@ -50,6 +56,7 @@ export class Pantera {
       const response: PanteraResponse<T> = {
         ...res,
         config: finalConfig,
+        headers: parseHeaders(res.headers),
         data: finalConfig.responseType === 'json'
           ? await res.json() as T
           : await res.text() as T
@@ -65,7 +72,7 @@ export class Pantera {
         ...err,
         config: finalConfig
       }
-      
+
       if(this.responseInterceptor)
         return await this.responseInterceptor.onError(error)
 

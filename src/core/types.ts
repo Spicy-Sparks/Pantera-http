@@ -1,18 +1,25 @@
-export type PanteraResponse<T> = Response & {
-  config: PanteraConfig,
-  data: T
-}
-
-export type PanteraError = (Error | Response) & {
-  config: PanteraConfig,
-}
-
 export type ResponseType = 'json' | 'text'
 
-export type PanteraConfig = RequestInit & {
+export type PanteraHeaders = {
+  [key: string]: string | number | null | undefined
+}
+
+export type PanteraConfig = Omit<RequestInit, "headers"> & {
   baseUrl?: string,
   url?: string,
-  responseType?: ResponseType
+  responseType?: ResponseType,
+  headers?: PanteraHeaders
+}
+
+export type PanteraResponse<T> = Omit<Response, "headers"> & {
+  config: PanteraConfig,
+  data: T,
+  headers?: PanteraHeaders
+}
+
+export type PanteraError = (Error | Omit<Response, "headers">) & {
+  config: PanteraConfig,
+  headers?: PanteraHeaders
 }
 
 export type PanteraRequestInterceptors = {
