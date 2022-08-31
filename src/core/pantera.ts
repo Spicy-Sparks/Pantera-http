@@ -45,7 +45,7 @@ export class Pantera {
           ...res,
           data: finalConfig.responseType === 'json'
             ? await res.json() as T
-            : await res.text() as T,
+            : await res.text() as unknown as T,
           headers: parseHeaders(res.headers),
           config: finalConfig
         }
