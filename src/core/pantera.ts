@@ -30,7 +30,7 @@ export class Pantera {
       : config
 
     if(this.requestInterceptor)
-      finalConfig = await this.requestInterceptor.onBeforeSend(config)
+      finalConfig = await this.requestInterceptor.onBeforeSend(finalConfig)
 
     const finalUrl = mergeUrl(finalConfig.url || '', finalConfig.baseUrl)
 
