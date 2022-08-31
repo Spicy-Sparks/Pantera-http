@@ -87,43 +87,43 @@ export class Pantera {
     }
   }
 
-  public get = <T = any>(url: string, config: PanteraConfig) => this.request<T>({
+  public get = <T = any>(url: string, config?: PanteraConfig) => this.request<T>({
     method: 'get',
     url: url,
     ...config
   })
 
-  public post = <T = any>(url: string, config: PanteraConfig) => this.request<T>({
+  public post = <T = any>(url: string, config?: PanteraConfig) => this.request<T>({
     method: 'post',
     url: url,
     ...config
   })
 
-  public put = <T = any>(url: string, config: PanteraConfig) => this.request<T>({
+  public put = <T = any>(url: string, config?: PanteraConfig) => this.request<T>({
     method: 'put',
     url: url,
     ...config
   })
 
-  public patch = <T = any>(url: string, config: PanteraConfig) => this.request<T>({
+  public patch = <T = any>(url: string, config?: PanteraConfig) => this.request<T>({
     method: 'patch',
     url: url,
     ...config
   })
 
-  public delete = <T = any>(url: string, config: PanteraConfig) => this.request<T>({
+  public delete = <T = any>(url: string, config?: PanteraConfig) => this.request<T>({
     method: 'delete',
     url: url,
     ...config
   })
 
-  public options = <T = any>(url: string, config: PanteraConfig) => this.request<T>({
+  public options = <T = any>(url: string, config?: PanteraConfig) => this.request<T>({
     method: 'options',
     url: url,
     ...config
   })
 
-  public head = <T = any>(url: string, config: PanteraConfig) => this.request<T>({
+  public head = <T = any>(url: string, config?: PanteraConfig) => this.request<T>({
     method: 'head',
     url: url,
     ...config
