@@ -9,15 +9,43 @@ export const transformBody = (config: PanteraConfig): any => {
   if((typeof config.body === 'object') && (typeof contentType === 'string')) {
 
     if(contentType.startsWith('application/json'))
-      return JSON.stringify(config.body)
+      return generateApplicationJson(config.body)
 
-    if(contentType.startsWith('application/x-www-form-urlencoded')) {
-      let urlSearchParams = (config.body.constructor === URLSearchParams)
-        ? config.body
-        : new URLSearchParams(config.body)
-      return '&' +urlSearchParams.toString()
-    }
+    if(contentType.startsWith('application/x-www-form-urlencoded'))
+      return generateUrlSearchParams(config.body)
+
+    if(contentType.startsWith('multipart/form-data'))
+      return generateFormData(config.body)
   }
 
   return config.body
+}
+
+export const generateApplicationJson = (body: any): string => {
+  if(typeof body !== 'object')
+    return body
+
+  return JSON.stringify(body)
+}
+
+export const generateUrlSearchParams = (params: any): string => {
+  if(typeof params !== 'object')
+    return params
+
+  let urlSearchParams = (params.constructor === URLSearchParams)
+    ? params
+    : new URLSearchParams(params)
+
+  return '&' + urlSearchParams.toString()
+}
+
+export const generateFormData = (body: any): FormData => {
+  if(typeof body !== 'object')
+    return body
+
+  let formData = (body.constructor === FormData)
+    ? body
+    : new FormData(body)
+
+  return formData
 }
