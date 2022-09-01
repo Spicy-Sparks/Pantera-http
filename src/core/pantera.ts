@@ -6,8 +6,7 @@ import {
   PanteraError
 } from '../types'
 import {
-  mergeConfig,
-  mergeUrl
+  mergeConfig
 } from '../utils/config'
 import { transformBody } from '../transform/body'
 import { transformUrl } from '../transform/url'
