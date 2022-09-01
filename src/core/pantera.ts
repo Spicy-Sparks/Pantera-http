@@ -32,17 +32,24 @@ export class Pantera {
     if(this.requestInterceptor)
       finalConfig = await this.requestInterceptor.onBeforeSend(finalConfig)
 
+    const body = transformBody(finalConfig)
+
     try {
       const res = await fetch(transformUrl(finalConfig), {
         ...finalConfig,
-        body: transformBody(finalConfig),
+        body: body,
         // @ts-ignore
         headers: new Headers(finalConfig.headers)
       })
 
-      const data = finalConfig.responseType === 'json'
-        ? await res.json() as T
-        : await res.text() as unknown as T
+      let data: T | undefined = undefined
+
+      try {
+        data = finalConfig.responseType === 'json'
+          ? await res.json() as T
+          : await res.text() as unknown as T
+      }
+      catch (err) {}
 
       const headers = Object.fromEntries(res.headers.entries())
 

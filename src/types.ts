@@ -20,7 +20,7 @@ export type PanteraConfig = Omit<Omit<RequestInit, "body">, "headers"> & {
 
 export type PanteraResponse<T = any> = Omit<Response, "headers"> & {
   config: PanteraConfig,
-  data: T,
+  data?: T,
   headers?: PanteraHeaders
 }
 
