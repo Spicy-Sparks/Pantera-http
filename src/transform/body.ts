@@ -29,23 +29,19 @@ export const generateApplicationJson = (body: any): string => {
 }
 
 export const generateUrlSearchParams = (params: any): string => {
-  if(typeof params !== 'object')
+  if((typeof params !== 'object') || (params.constructor === URLSearchParams))
     return params
 
-  let urlSearchParams = (params.constructor === URLSearchParams)
-    ? params
-    : new URLSearchParams(params)
-
-  return '&' + urlSearchParams.toString()
+  return `&${new URLSearchParams(params).toString()}`
 }
 
 export const generateFormData = (body: any): FormData => {
-  if(typeof body !== 'object')
+  if((typeof body !== 'object') || (body.constructor === FormData))
     return body
 
-  let formData = (body.constructor === FormData)
-    ? body
-    : new FormData(body)
+  let formData = new FormData()
+  for(var key in body)
+    formData.append(key, body[key])
 
   return formData
 }

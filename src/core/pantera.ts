@@ -10,6 +10,7 @@ import {
 } from '../utils/config'
 import { transformBody } from '../transform/body'
 import { transformUrl } from '../transform/url'
+import { transformHeaders } from '../transform/headers'
 import { errorToObject } from '../utils/errors'
 
 export class Pantera {
@@ -32,14 +33,15 @@ export class Pantera {
     if(this.requestInterceptor)
       finalConfig = await this.requestInterceptor.onBeforeSend(finalConfig)
 
-    const body = transformBody(finalConfig)
+    const reqBody = transformBody(finalConfig)
+    const reqUrl = transformUrl(finalConfig)
+    const reqHeaders = transformHeaders(finalConfig)
 
     try {
-      const res = await fetch(transformUrl(finalConfig), {
+      const res = await fetch(reqUrl, {
         ...finalConfig,
-        body: body,
-        // @ts-ignore
-        headers: new Headers(finalConfig.headers)
+        body: reqBody,
+        headers: reqHeaders
       })
 
       let data: T | undefined = undefined
