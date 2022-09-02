@@ -37,6 +37,9 @@ export const mergeUrl = (
   if(!baseUrl)
     return url
 
+  if(url.startsWith('http'))
+    return url
+
   if(baseUrl.endsWith('/'))
     baseUrl = baseUrl.slice(0, -1)
 
