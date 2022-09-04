@@ -11,6 +11,7 @@ import {
 import { transformBody } from '../transform/body'
 import { transformUrl } from '../transform/url'
 import { transformHeaders } from '../transform/headers'
+import { transformCredentials } from '../transform/credentials'
 import { errorToObject } from '../utils/errors'
 
 export class Pantera {
@@ -36,12 +37,14 @@ export class Pantera {
     const reqBody = transformBody(finalConfig)
     const reqUrl = transformUrl(finalConfig)
     const reqHeaders = transformHeaders(finalConfig)
+    const reqCredentials = transformCredentials(finalConfig)
 
     try {
       const res = await fetch(reqUrl, {
         ...finalConfig,
         body: reqBody,
-        headers: reqHeaders
+        headers: reqHeaders,
+        credentials: reqCredentials
       })
 
       let data: T | undefined = undefined

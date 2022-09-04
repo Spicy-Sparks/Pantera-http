@@ -1,7 +1,9 @@
 import { PanteraConfig } from '../types'
 import { mergeUrl } from '../utils/config'
 
-export const transformUrl = (config: PanteraConfig): string => {
+export const transformUrl = (
+  config: PanteraConfig
+): string => {
   const finalUrl = mergeUrl(config.url || '', config.baseUrl)
 
   if(config.params && config.method?.match(/get|head/)) {

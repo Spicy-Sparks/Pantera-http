@@ -4,17 +4,22 @@ export type PanteraHeaders = {
   [key: string]: string | number | boolean | null | undefined
 }
 
-export type PanteraConfig = Omit<Omit<RequestInit, "body">, "headers"> & {
+export type PanteraConfig = Omit<Omit<Omit<RequestInit, "credentials">, "body">, "headers"> & {
   baseUrl?: string,
   url?: string,
   responseType?: ResponseType,
   headers?: PanteraHeaders,
   body?: any,
+  credentials?: boolean | RequestCredentials,
   params?: {
     [key: string]: string | number | boolean | null | undefined
   },
   extraConfig?: {
     [key: string]: string | number | boolean | null | undefined
+  },
+  auth?: {
+    username: string,
+    password: string
   }
 }
 

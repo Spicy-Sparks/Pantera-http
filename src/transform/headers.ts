@@ -1,6 +1,8 @@
 import { PanteraConfig } from '../types'
 
-export const transformHeaders = (config: PanteraConfig): Headers | undefined => {
+export const transformHeaders = (
+  config: PanteraConfig
+): Headers | undefined => {
   if(!config.headers)
     return
 
@@ -11,6 +13,15 @@ export const transformHeaders = (config: PanteraConfig): Headers | undefined => 
     if(typeof value === 'undefined' || value === null)
       continue
     headers.append(key, value.toString())
+  }
+
+  if(config.auth && !config.headers.Authorization) {
+    const {
+      username,
+      password
+    } = config.auth
+    const value = `Basic ${Buffer.from(`${username}:${password}`).toString('base64')}`
+    headers.append('Authorization', value)
   }
 
   return headers

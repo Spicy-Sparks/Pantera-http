@@ -1,6 +1,8 @@
 import { PanteraConfig } from '../types'
 
-export const transformBody = (config: PanteraConfig): any => {
+export const transformBody = (
+  config: PanteraConfig
+): any => {
   if(!config.body)
     return config.body
 
