@@ -139,6 +139,13 @@ export class Pantera {
     ...config
   })
 
+  public getBaseConfig = (): PanteraConfig | undefined => this.baseConfig
+
+  public setBaseConfig = (config: PanteraConfig): PanteraConfig => {
+    this.baseConfig = config
+    return this.baseConfig
+  }
+
   private bindRequestInterceptor = (
     onBeforeSend: PanteraRequestInterceptors['onBeforeSend']
   ) => {
