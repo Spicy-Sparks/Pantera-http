@@ -3,7 +3,9 @@ import { PanteraConfig } from '../types'
 export const transformResponse = async <T>(
   config: PanteraConfig,
   response: Response
-): Promise<T> => {
+): Promise<T | undefined> => {
+  if(response.bodyUsed)
+    return
 
   switch (config.responseType) {
     case 'json':
