@@ -12,6 +12,7 @@ import { transformBody } from '../transform/body'
 import { transformUrl } from '../transform/url'
 import { transformHeaders } from '../transform/headers'
 import { transformCredentials } from '../transform/credentials'
+import { transformResponse } from '../transform/response'
 import { errorToObject } from '../utils/errors'
 
 export class Pantera {
@@ -50,9 +51,7 @@ export class Pantera {
       let data: T | undefined = undefined
 
       try {
-        data = finalConfig.responseType === 'json'
-          ? await res.json() as T
-          : await res.text() as unknown as T
+        data = await transformResponse<T>(finalConfig, res)
       }
       catch (err) {}
 

@@ -1,4 +1,4 @@
-export type ResponseType = 'json' | 'text'
+export type ResponseType = 'json' | 'text' | 'blob'
 
 export type PanteraHeaders = {
   [key: string]: string | number | boolean | null | undefined
