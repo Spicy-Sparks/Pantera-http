@@ -20,7 +20,8 @@
     "noFallthroughCasesInSwitch": true,
     "isolatedModules": true,
     "module": "commonjs",
-    "baseUrl": "."
+    "baseUrl": ".",
+    "declaration": true
   },
   "exclude": [
     "scripts",
