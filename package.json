@@ -6,8 +6,23 @@
   "scripts": {
     "build": "tsc"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Spicy-Sparks/Pantera-http"
+  },
+  "keywords": [
+    "http",
+    "request",
+    "fetch",
+    "promise",
+    "node"
+  ],
   "author": "Spicy Sparks",
-  "license": "ISC",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Spicy-Sparks/Pantera-http/issues"
+  },
+  "homepage": "https://spicysparks.com",
   "devDependencies": {
     "typescript": "^4.8.2"
   }
