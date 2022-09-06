@@ -3,7 +3,7 @@
     <a href="https://github.com/Spicy-Sparks/Pantera"><img src="https://github.com/Spicy-Sparks/Pantera/blob/master/assets/Pantera.png" alt="pantera-logo" width="320px"></a>
   <br>
 	<br>
-    <a href="https://github.com/Spicy-Sparks/Pantera">Pantera</a><br>
+    <a href="https://github.com/Spicy-Sparks/Pantera">Pantera-HTTP</a><br>
 	<br>
 </h1>
 <h4 align="center">
@@ -25,17 +25,19 @@
 
 Using npm:
 
-`npm install pantera`
+`npm install pantera-http`
 
 Using yarn:
 
-`yarn add pantera`
+`yarn add pantera-http`
 
 ## Basic usage
 
 Creating a request
 
 ```js
+import pantera from 'pantera-http'
+
 pantera.request({
   method: 'get',
   url: 'https://myapplication.com/api/user',
@@ -66,7 +68,7 @@ pantera.request({
 Shortcuts for `GET`, `POST`, `PUT`, `PATCH`, `PUT`, `OPTIONS`, `DELETE` requests.
 
 ```js
-import pantera from 'pantera'
+import pantera from 'pantera-http'
 
 pantera.get('https://myapplication.com/api/user', {
   params: {
@@ -91,6 +93,8 @@ pantera.post('https://myapplication.com/api/form', {
 It is possible to create multiple instances for different situations or across multiple APIs. Each instance can have a common base URL that will be applied to all requests, default headers, a common responseType, a common extraConfig or a common authentication. In general, the specified default configuration will be added to each request.
 
 ```js
+import { Pantera } from 'pantera-http'
+
 const simpleClient = new Pantera({
   baseUrl: 'https://myapplication.com/api',
   responseType: 'json'
@@ -141,6 +145,8 @@ const response = await complexClient.request({
 Pantera fully supports `async/await` syntax.
 
 ```js
+import pantera from 'pantera-http'
+
 try {
   const response = await pantera.get('https://myapplication.com/api/json-response', {
     responseType: 'json',
@@ -163,6 +169,8 @@ catch (error) {
 The response is automatically parsed into JSON, Blob or plain text, depending on the `responseType`.
 
 ```js
+import pantera from 'pantera-http'
+
 pantera.get('https://myapplication.com/api/json-response', {
   responseType: 'json'
 })
@@ -183,6 +191,8 @@ All your files and folders are presented as a tree in the file explorer. You can
 You can intercept requests or responses before they are handled by `then` or `catch`.
 
 ```js
+import { Pantera } from 'pantera-http'
+
 const myClient = new Pantera({
   baseUrl: 'https://myapplication.com/api',
   responseType: 'json'
@@ -225,6 +235,8 @@ myClient.interceptors.response.use(
 Since Pantera is based on [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise), you can send multiple requests that will be executed at the same time and read all their responses at the end using [Promise.all](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/all), or any other Promise API.
 
 ```js
+import pantera from 'pantera-http'
+
 Promise.all([
   pantera.get('https://myapplication.com/api/index.html', {
     responseType: 'text'
@@ -247,6 +259,8 @@ Pantera supports [basic auth](https://developer.mozilla.org/en-US/docs/Web/HTTP/
 `credentials` can be `include` (or `true`), `omit` (or `false`), `same-origin`.
 
 ```js
+import pantera from 'pantera-http'
+
 pantera.get('https://myapplication.com/api/json-response', {
   responseType: 'json',
   credentials: true,
@@ -262,6 +276,8 @@ pantera.get('https://myapplication.com/api/json-response', {
 In case you need to get custom attributes in your interceptor or response, you can append it in `extraConfig`.
 
 ```
+import { Pantera } from 'pantera-http'
+
 const myClient = new Pantera({
     baseUrl: 'https://myapplication.com/api'
 })
