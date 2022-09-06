@@ -1,5 +1,5 @@
 <h1 align="center">
-	<a href="https://elbywan.github.io/wretch"><img src="assets/pantera.png" alt="pantera-logo" width="220px"></a><br>
+	<a href="https://github.com/Spicy-Sparks/Pantera"><img src="assets/pantera.png" alt="pantera-logo" width="220px"></a><br>
 	<br>
     <a href="https://github.com/Spicy-Sparks/Pantera">Pantera</a><br>
 	<br>
