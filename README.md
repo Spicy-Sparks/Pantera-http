@@ -1,5 +1,7 @@
 <h1 align="center">
-	<a href="https://github.com/Spicy-Sparks/Pantera"><img src="assets/Pantera.png" alt="pantera-logo" width="320px"></a><br>
+  <br>
+	<a href="https://github.com/Spicy-Sparks/Pantera"><img src="assets/Pantera.png" alt="pantera-logo" width="320px"></a>
+  <br>
 	<br>
     <a href="https://github.com/Spicy-Sparks/Pantera">Pantera</a><br>
 	<br>
