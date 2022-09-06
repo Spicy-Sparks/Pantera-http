@@ -1,6 +1,6 @@
 ﻿# Pantera
 
-![logo](./assets/pantera.png)
+![logo](assets/pantera.png)
 
 An HTTP request client that provides an [axios](https://github.com/axios/axios) like interface over top of [fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API). Super lightweight. Supports interceptors and multiple instances.
 
