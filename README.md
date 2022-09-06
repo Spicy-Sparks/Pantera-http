@@ -7,7 +7,7 @@
 	<br>
 </h1>
 <h4 align="center">
-	An HTTP request client that provides an <a href="https://github.com/axios/axios>axios</a> like interface over top of <a href="https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API>fetch</a>. Super lightweight. Supports interceptors and multiple instances.
+	An HTTP request client that provides an <a href="https://github.com/axios/axios">axios</a> like interface over top of <a href="https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API">fetch</a>. Super lightweight. Supports interceptors and multiple instances.
 </h4>
 
 ## Features
