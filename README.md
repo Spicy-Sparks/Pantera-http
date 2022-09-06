@@ -1,8 +1,12 @@
-﻿# Pantera
-
-![logo](assets/pantera.png)
-
-An HTTP request client that provides an [axios](https://github.com/axios/axios) like interface over top of [fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API). Super lightweight. Supports interceptors and multiple instances.
+<h1 align="center">
+	<a href="https://elbywan.github.io/wretch"><img src="assets/pantera.png" alt="pantera-logo" width="220px"></a><br>
+	<br>
+    <a href="https://github.com/Spicy-Sparks/Pantera">Pantera</a><br>
+	<br>
+</h1>
+<h4 align="center">
+	An HTTP request client that provides an <a href="https://github.com/axios/axios>axios</a> like interface over top of <a href="https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API>fetch</a>. Super lightweight. Supports interceptors and multiple instances.
+</h4>
 
 ## Features
 
