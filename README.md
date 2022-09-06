@@ -42,12 +42,12 @@ pantera.request({
   method: 'get',
   url: 'https://myapplication.com/api/user',
   params: {
-	   ID: 12345
+    ID: 12345
   },
   responseType: 'json',
   headers: {
-	   Authorization: 'Bearer myToken',
-	   'Content-Type': 'application/json'
+    Authorization: 'Bearer myToken',
+    'Content-Type': 'application/json'
   }
 })
 .then(function (response) {
@@ -103,14 +103,14 @@ const simpleClient = new Pantera({
 const response = await simpleClient.request('/user', {
   method: 'get',
   params: {
-  	ID: 1234
+    ID: 1234
   }
 })
 
 // or
 const response = await simpleClient.get('/user', {
   params: {
-  	ID: 1234
+    ID: 1234
   }
 })
 
@@ -151,7 +151,7 @@ try {
   const response = await pantera.get('https://myapplication.com/api/json-response', {
     responseType: 'json',
     params: {
-	    myQueryStringParameter: 'value'
+      myQueryStringParameter: 'value'
     }
   })
   // handle success
@@ -220,9 +220,9 @@ myClient.interceptors.response.use(
     // Do something with response error
 
     if (err.status === 401) {
-	    const refreshResponse = await refreshToken()
-	    err.config.headers.Authorization = `Bearer ${refreshResponse.newToken}`
-        return myClient.request(err.config)
+      const refreshResponse = await refreshToken()
+      err.config.headers.Authorization = `Bearer ${refreshResponse.newToken}`
+      return myClient.request(err.config)
     }
 
     return Promise.reject(error)
@@ -279,7 +279,7 @@ In case you need to get custom attributes in your interceptor or response, you c
 import { Pantera } from 'pantera-http'
 
 const myClient = new Pantera({
-    baseUrl: 'https://myapplication.com/api'
+  baseUrl: 'https://myapplication.com/api'
 })
 
 myClient.interceptors.request.use((config) => {
