@@ -275,7 +275,7 @@ pantera.get('https://myapplication.com/api/json-response', {
 
 In case you need to get custom attributes in your interceptor or response, you can append it in `extraConfig`.
 
-```
+```js
 import { Pantera } from 'pantera-http'
 
 const myClient = new Pantera({
