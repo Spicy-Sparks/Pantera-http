@@ -1,6 +1,6 @@
 {
   "name": "pantera-http",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "An HTTP request client that provides an axios like interface over top of node-fetch. Super lightweight. Supports interceptors and multiple instances.",
   "main": "dist/index.js",
   "type": "module",
