@@ -1,14 +1,11 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Pantera = void 0;
-const config_1 = require("../utils/config");
-const body_1 = require("../transform/body");
-const url_1 = require("../transform/url");
-const headers_1 = require("../transform/headers");
-const credentials_1 = require("../transform/credentials");
-const response_1 = require("../transform/response");
-const errors_1 = require("../utils/errors");
-class Pantera {
+import { mergeConfig } from '../utils/config';
+import { transformBody } from '../transform/body';
+import { transformUrl } from '../transform/url';
+import { transformHeaders } from '../transform/headers';
+import { transformCredentials } from '../transform/credentials';
+import { transformResponse } from '../transform/response';
+import { errorToObject } from '../utils/errors';
+export class Pantera {
     baseConfig;
     requestInterceptor;
     responseInterceptor;
@@ -17,14 +14,14 @@ class Pantera {
     }
     request = async (config) => {
         let finalConfig = this.baseConfig
-            ? (0, config_1.mergeConfig)(this.baseConfig, config)
+            ? mergeConfig(this.baseConfig, config)
             : config;
         if (this.requestInterceptor)
             finalConfig = await this.requestInterceptor.onBeforeSend(finalConfig);
-        const reqBody = (0, body_1.transformBody)(finalConfig);
-        const reqUrl = (0, url_1.transformUrl)(finalConfig);
-        const reqHeaders = (0, headers_1.transformHeaders)(finalConfig);
-        const reqCredentials = (0, credentials_1.transformCredentials)(finalConfig);
+        const reqBody = transformBody(finalConfig);
+        const reqUrl = transformUrl(finalConfig);
+        const reqHeaders = transformHeaders(finalConfig);
+        const reqCredentials = transformCredentials(finalConfig);
         try {
             const res = await fetch(reqUrl, {
                 ...finalConfig,
@@ -34,7 +31,7 @@ class Pantera {
             });
             let data = undefined;
             try {
-                data = await (0, response_1.transformResponse)(finalConfig, res);
+                data = await transformResponse(finalConfig, res);
             }
             catch (err) { }
             const headers = Object.fromEntries(res.headers.entries());
@@ -61,7 +58,7 @@ class Pantera {
         }
         catch (err) {
             const error = {
-                ...(0, errors_1.errorToObject)(err),
+                ...errorToObject(err),
                 config: finalConfig
             };
             if (this.responseInterceptor)
@@ -137,4 +134,3 @@ class Pantera {
         }
     };
 }
-exports.Pantera = Pantera;

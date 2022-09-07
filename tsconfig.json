@@ -19,7 +19,6 @@
     "noImplicitAny": false,
     "noFallthroughCasesInSwitch": true,
     "isolatedModules": true,
-    "module": "commonjs",
     "baseUrl": ".",
     "declaration": true
   },

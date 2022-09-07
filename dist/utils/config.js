@@ -1,7 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.mergeUrl = exports.mergeConfig = void 0;
-const mergeConfig = (config1, config2) => {
+export const mergeConfig = (config1, config2) => {
     return {
         ...config1,
         ...config2,
@@ -25,8 +22,7 @@ const mergeConfig = (config1, config2) => {
         })
     };
 };
-exports.mergeConfig = mergeConfig;
-const mergeUrl = (url, baseUrl) => {
+export const mergeUrl = (url, baseUrl) => {
     if (!baseUrl)
         return url;
     if (url.startsWith('http'))
@@ -37,4 +33,3 @@ const mergeUrl = (url, baseUrl) => {
         url = '/' + url;
     return baseUrl + url;
 };
-exports.mergeUrl = mergeUrl;

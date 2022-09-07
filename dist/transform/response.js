@@ -1,7 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.transformResponse = void 0;
-const transformResponse = async (config, response) => {
+export const transformResponse = async (config, response) => {
     if (response.bodyUsed)
         return;
     switch (config.responseType) {
@@ -14,4 +11,3 @@ const transformResponse = async (config, response) => {
             return await response.text();
     }
 };
-exports.transformResponse = transformResponse;

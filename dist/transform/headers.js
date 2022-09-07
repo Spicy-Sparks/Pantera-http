@@ -1,7 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.transformHeaders = void 0;
-const transformHeaders = (config) => {
+export const transformHeaders = (config) => {
     if (!config.headers)
         return;
     let headers = new Headers();
@@ -18,4 +15,3 @@ const transformHeaders = (config) => {
     }
     return headers;
 };
-exports.transformHeaders = transformHeaders;
