@@ -1,10 +1,12 @@
-export const transformHeaders = (config) => {
+export const transformHeaders = (config, body) => {
     if (!config.headers)
         return;
     let headers = new Headers();
     for (var key in config.headers) {
         const value = config.headers[key];
         if (typeof value === 'undefined' || value === null)
+            continue;
+        if ((key === 'Content-Type') && (value === 'multipart/form-data') && (body.constructor === FormData))
             continue;
         headers.append(key, value.toString());
     }

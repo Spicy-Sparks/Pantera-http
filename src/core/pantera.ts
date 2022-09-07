@@ -37,7 +37,7 @@ export class Pantera {
 
     const reqBody = transformBody(finalConfig)
     const reqUrl = transformUrl(finalConfig)
-    const reqHeaders = transformHeaders(finalConfig)
+    const reqHeaders = transformHeaders(finalConfig, reqBody)
     const reqCredentials = transformCredentials(finalConfig)
 
     try {

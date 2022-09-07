@@ -1,7 +1,8 @@
 import { PanteraConfig } from '../types'
 
 export const transformHeaders = (
-  config: PanteraConfig
+  config: PanteraConfig,
+  body: any
 ): Headers | undefined => {
   if(!config.headers)
     return
@@ -11,6 +12,8 @@ export const transformHeaders = (
   for(var key in config.headers) {
     const value = config.headers[key]
     if(typeof value === 'undefined' || value === null)
+      continue
+    if((key === 'Content-Type') && (value === 'multipart/form-data') && (body.constructor === FormData))
       continue
     headers.append(key, value.toString())
   }

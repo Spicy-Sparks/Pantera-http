@@ -20,7 +20,7 @@ export class Pantera {
             finalConfig = await this.requestInterceptor.onBeforeSend(finalConfig);
         const reqBody = transformBody(finalConfig);
         const reqUrl = transformUrl(finalConfig);
-        const reqHeaders = transformHeaders(finalConfig);
+        const reqHeaders = transformHeaders(finalConfig, reqBody);
         const reqCredentials = transformCredentials(finalConfig);
         try {
             const res = await fetch(reqUrl, {
