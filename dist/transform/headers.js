@@ -6,7 +6,7 @@ export const transformHeaders = (config, body) => {
         const value = config.headers[key];
         if (typeof value === 'undefined' || value === null)
             continue;
-        if ((key === 'Content-Type') && (value === 'multipart/form-data') && (body.constructor === FormData))
+        if ((key === 'Content-Type') && (value === 'multipart/form-data') && (body?.constructor === FormData))
             continue;
         headers.append(key, value.toString());
     }
