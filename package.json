@@ -1,6 +1,6 @@
 {
   "name": "pantera-http",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "An HTTP request client that provides an axios like interface over top of node-fetch. Super lightweight. Supports interceptors and multiple instances.",
   "main": "dist/index.js",
   "scripts": {
@@ -30,6 +30,7 @@
   "types": "dist/index.d.ts",
   "homepage": "https://spicysparks.com",
   "devDependencies": {
+    "@types/node": "^18.15.11",
     "typescript": "^4.8.2"
   }
 }

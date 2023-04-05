@@ -37,20 +37,36 @@ export class Pantera {
             const headers = Object.fromEntries(res.headers.entries());
             if (!res.ok) {
                 const error = {
-                    ...res,
-                    data: data,
-                    headers: headers,
-                    config: finalConfig
+                    ...Object.assign({}, res, {
+                        bodyUsed: res.bodyUsed,
+                        redirected: res.redirected,
+                        status: res.status,
+                        statusText: res.statusText,
+                        type: res.type,
+                        url: res.url,
+                    }, res, {
+                        config: finalConfig,
+                        headers: headers,
+                        data: data
+                    })
                 };
                 if (this.responseInterceptor)
                     return await this.responseInterceptor.onError(error);
                 return Promise.reject(res);
             }
             const response = {
-                ...res,
-                config: finalConfig,
-                headers: headers,
-                data: data
+                ...Object.assign({}, res, {
+                    bodyUsed: res.bodyUsed,
+                    redirected: res.redirected,
+                    status: res.status,
+                    statusText: res.statusText,
+                    type: res.type,
+                    url: res.url,
+                }, res, {
+                    config: finalConfig,
+                    headers: headers,
+                    data: data
+                })
             };
             if (this.responseInterceptor)
                 return await this.responseInterceptor.onSuccess(response);
