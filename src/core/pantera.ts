@@ -59,10 +59,18 @@ export class Pantera {
 
       if(!res.ok) {
         const error: PanteraError<T> = {
-          ...res,
-          data: data,
-          headers: headers,
-          config: finalConfig
+          ...Object.assign({}, res, {
+            bodyUsed: res.bodyUsed,
+            redirected: res.redirected,
+            status: res.status,
+            statusText: res.statusText,
+            type: res.type,
+            url: res.url,
+          }, res, {
+            config: finalConfig,
+            headers: headers,
+            data: data
+          })
         }
 
         if(this.responseInterceptor)
@@ -72,10 +80,18 @@ export class Pantera {
       }
 
       const response: PanteraResponse<T> = {
-        ...res,
-        config: finalConfig,
-        headers: headers,
-        data: data
+        ...Object.assign({}, res, {
+          bodyUsed: res.bodyUsed,
+          redirected: res.redirected,
+          status: res.status,
+          statusText: res.statusText,
+          type: res.type,
+          url: res.url,
+        }, res, {
+          config: finalConfig,
+          headers: headers,
+          data: data
+        })
       }
 
       if(this.responseInterceptor)
