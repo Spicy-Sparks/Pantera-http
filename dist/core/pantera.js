@@ -25,6 +25,7 @@ export class Pantera {
         try {
             const res = await fetch(reqUrl, {
                 ...finalConfig,
+                method: finalConfig.method?.toUpperCase(),
                 body: reqBody,
                 headers: reqHeaders,
                 credentials: reqCredentials
@@ -83,37 +84,37 @@ export class Pantera {
         }
     };
     get = (url, config) => this.request({
-        method: 'get',
+        method: 'GET',
         url: url,
         ...config
     });
     post = (url, config) => this.request({
-        method: 'post',
+        method: 'POST',
         url: url,
         ...config
     });
     put = (url, config) => this.request({
-        method: 'put',
+        method: 'PUT',
         url: url,
         ...config
     });
     patch = (url, config) => this.request({
-        method: 'patch',
+        method: 'PATCH',
         url: url,
         ...config
     });
     delete = (url, config) => this.request({
-        method: 'delete',
+        method: 'DELETE',
         url: url,
         ...config
     });
     options = (url, config) => this.request({
-        method: 'options',
+        method: 'OPTIONS',
         url: url,
         ...config
     });
     head = (url, config) => this.request({
-        method: 'head',
+        method: 'HEAD',
         url: url,
         ...config
     });

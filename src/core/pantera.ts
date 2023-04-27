@@ -43,6 +43,7 @@ export class Pantera {
     try {
       const res = await fetch(reqUrl, {
         ...finalConfig,
+        method: finalConfig.method?.toUpperCase(),
         body: reqBody,
         headers: reqHeaders,
         credentials: reqCredentials
@@ -113,43 +114,43 @@ export class Pantera {
   }
 
   public get = <T = any>(url: string, config?: PanteraConfig) => this.request<T>({
-    method: 'get',
+    method: 'GET',
     url: url,
     ...config
   })
 
   public post = <T = any>(url: string, config?: PanteraConfig) => this.request<T>({
-    method: 'post',
+    method: 'POST',
     url: url,
     ...config
   })
 
   public put = <T = any>(url: string, config?: PanteraConfig) => this.request<T>({
-    method: 'put',
+    method: 'PUT',
     url: url,
     ...config
   })
 
   public patch = <T = any>(url: string, config?: PanteraConfig) => this.request<T>({
-    method: 'patch',
+    method: 'PATCH',
     url: url,
     ...config
   })
 
   public delete = <T = any>(url: string, config?: PanteraConfig) => this.request<T>({
-    method: 'delete',
+    method: 'DELETE',
     url: url,
     ...config
   })
 
   public options = <T = any>(url: string, config?: PanteraConfig) => this.request<T>({
-    method: 'options',
+    method: 'OPTIONS',
     url: url,
     ...config
   })
 
   public head = <T = any>(url: string, config?: PanteraConfig) => this.request<T>({
-    method: 'head',
+    method: 'HEAD',
     url: url,
     ...config
   })
