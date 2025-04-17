@@ -60,7 +60,7 @@ pantera.request({
   const { response, config } = error
   console.log(error)
 })
-.then(function () {
+.finally(function () {
   // always executed
 })
 ```
