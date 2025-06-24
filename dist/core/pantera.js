@@ -53,7 +53,7 @@ export class Pantera {
                 };
                 if (this.responseInterceptor)
                     return await this.responseInterceptor.onError(error);
-                return Promise.reject(res);
+                return Promise.reject(error);
             }
             const response = {
                 ...Object.assign({}, res, {
