@@ -74,9 +74,14 @@ export class Pantera {
           })
         }
 
-        if(this.responseInterceptor)
-          return await this.responseInterceptor.onError(error)
-
+        if(this.responseInterceptor) {
+          try {
+            return await this.responseInterceptor.onError(error)
+          }
+          catch (err) {
+            return Promise.reject(err)
+          }
+        }
         return Promise.reject(error)
       }
 
@@ -106,8 +111,14 @@ export class Pantera {
         config: finalConfig
       }
 
-      if(this.responseInterceptor)
-        return await this.responseInterceptor.onError(error)
+      if(this.responseInterceptor) {
+        try {
+          return await this.responseInterceptor.onError(error)
+        }
+        catch (err) {
+          return Promise.reject(err)
+        }
+      }
 
       return Promise.reject(error)
     }
