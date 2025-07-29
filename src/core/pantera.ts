@@ -31,78 +31,109 @@ export class Pantera {
     let finalConfig = this.baseConfig
       ? mergeConfig(this.baseConfig, config)
       : config
-
-    if(this.requestInterceptor)
+  
+    if (this.requestInterceptor) {
       finalConfig = await this.requestInterceptor.onBeforeSend(finalConfig)
-
-    const reqBody = transformBody(finalConfig)
-    const reqUrl = transformUrl(finalConfig)
-    const reqHeaders = transformHeaders(finalConfig, reqBody)
+    }
+  
+    const reqBody        = transformBody(finalConfig)
+    const reqUrl         = transformUrl(finalConfig)
+    const reqHeaders     = transformHeaders(finalConfig, reqBody)
     const reqCredentials = transformCredentials(finalConfig)
-
+  
     try {
-      const res = await fetch(reqUrl, {
-        ...finalConfig,
-        method: finalConfig.method?.toUpperCase(),
-        body: reqBody,
-        headers: reqHeaders,
-        credentials: reqCredentials
-      })
-
-      let data: T | undefined = undefined
-
-      try {
-        data = await transformResponse<T>(finalConfig, res)
-      }
-      catch (err) {}
-
-      const headers = Object.fromEntries(res.headers.entries())
-
-      if(!res.ok) {
-        const error: PanteraError<T> = {
-          ...Object.assign({}, res, {
-            bodyUsed: res.bodyUsed,
-            redirected: res.redirected,
-            status: res.status,
-            statusText: res.statusText,
-            type: res.type,
-            url: res.url,
-          }, res, {
-            config: finalConfig,
-            headers: headers,
-            data: data
+      const xhrResponse = await new Promise<any>((resolve, reject) => {
+        const xhr = new XMLHttpRequest()
+  
+        xhr.open((finalConfig.method ?? 'GET').toUpperCase(), reqUrl, true)
+  
+        xhr.withCredentials = reqCredentials === 'include'
+  
+        // if (finalConfig.timeout != null) xhr.timeout = finalConfig.timeout
+  
+        Object.entries(reqHeaders ?? {}).forEach(([k, v]) => {
+          if (v !== undefined) xhr.setRequestHeader(k, String(v))
+        })
+  
+        xhr.onload = () => {
+          const raw = xhr.getAllResponseHeaders()
+          const map = new Map<string, string>()
+          raw.trim().split(/[\r\n]+/).forEach(line => {
+            const [key, ...rest] = line.split(': ')
+            if (key) map.set(key, rest.join(': '))
           })
+          const headersObject = Object.fromEntries(map)
+  
+          const resLike = {
+            ok: xhr.status >= 200 && xhr.status < 300,
+            status: xhr.status,
+            statusText: xhr.statusText,
+            url: xhr.responseURL,
+            headers: { entries: () => map.entries() },
+            text: () => Promise.resolve(xhr.responseText),
+            json: () => Promise.resolve(JSON.parse(xhr.responseText)),
+            blob: () => Promise.resolve(new Blob([xhr.response])),
+            arrayBuffer: () => Promise.resolve(
+              new TextEncoder().encode(xhr.responseText).buffer
+            ),
+            bodyUsed: false,
+            redirected: false,
+            type: 'basic'
+          }
+  
+          resolve({ resLike, headersObject })
         }
-
-        if(this.responseInterceptor) {
+  
+        xhr.onerror   = () => reject(new TypeError('Network request failed'))
+        xhr.ontimeout = () => reject(new TypeError('XMLHttpRequest timeout'))
+        xhr.onabort   = () => reject(new DOMException('Aborted', 'AbortError'))
+  
+        xhr.send(reqBody as Document | XMLHttpRequestBodyInit | null)
+      })
+  
+      const { resLike, headersObject } = xhrResponse
+      let data: T | undefined
+  
+      try {
+        data = await transformResponse<T>(finalConfig, resLike)
+      } catch (_err) {}
+  
+      if (!resLike.ok) {
+        const error: PanteraError<T> = {
+          ...Object.assign({}, resLike, {
+            status: resLike.status,
+            statusText: resLike.statusText,
+            url: resLike.url,
+          }),
+          config:  finalConfig,
+          headers: headersObject,
+          data
+        }
+  
+        if (this.responseInterceptor) {
           try {
             return await this.responseInterceptor.onError(error)
-          }
-          catch (err) {
+          } catch (err) {
             return Promise.reject(err)
           }
         }
         return Promise.reject(error)
       }
-
+  
       const response: PanteraResponse<T> = {
-        ...Object.assign({}, res, {
-          bodyUsed: res.bodyUsed,
-          redirected: res.redirected,
-          status: res.status,
-          statusText: res.statusText,
-          type: res.type,
-          url: res.url,
-        }, res, {
-          config: finalConfig,
-          headers: headers,
-          data: data
-        })
+        ...Object.assign({}, resLike, {
+          status: resLike.status,
+          statusText: resLike.statusText,
+          url: resLike.url,
+        }),
+        config:  finalConfig,
+        headers: headersObject,
+        data
       }
-
-      if(this.responseInterceptor)
+  
+      if (this.responseInterceptor)
         return await this.responseInterceptor.onSuccess(response)
-
+  
       return Promise.resolve(response)
     }
     catch (err: any) {
@@ -110,7 +141,7 @@ export class Pantera {
         ...errorToObject(err),
         config: finalConfig
       }
-
+  
       if(this.responseInterceptor) {
         try {
           return await this.responseInterceptor.onError(error)
@@ -119,7 +150,7 @@ export class Pantera {
           return Promise.reject(err)
         }
       }
-
+  
       return Promise.reject(error)
     }
   }

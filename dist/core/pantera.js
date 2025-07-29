@@ -16,40 +16,69 @@ export class Pantera {
         let finalConfig = this.baseConfig
             ? mergeConfig(this.baseConfig, config)
             : config;
-        if (this.requestInterceptor)
+        if (this.requestInterceptor) {
             finalConfig = await this.requestInterceptor.onBeforeSend(finalConfig);
+        }
         const reqBody = transformBody(finalConfig);
         const reqUrl = transformUrl(finalConfig);
         const reqHeaders = transformHeaders(finalConfig, reqBody);
         const reqCredentials = transformCredentials(finalConfig);
         try {
-            const res = await fetch(reqUrl, {
-                ...finalConfig,
-                method: finalConfig.method?.toUpperCase(),
-                body: reqBody,
-                headers: reqHeaders,
-                credentials: reqCredentials
+            const xhrResponse = await new Promise((resolve, reject) => {
+                const xhr = new XMLHttpRequest();
+                xhr.open((finalConfig.method ?? 'GET').toUpperCase(), reqUrl, true);
+                xhr.withCredentials = reqCredentials === 'include';
+                // if (finalConfig.timeout != null) xhr.timeout = finalConfig.timeout
+                Object.entries(reqHeaders ?? {}).forEach(([k, v]) => {
+                    if (v !== undefined)
+                        xhr.setRequestHeader(k, String(v));
+                });
+                xhr.onload = () => {
+                    const raw = xhr.getAllResponseHeaders();
+                    const map = new Map();
+                    raw.trim().split(/[\r\n]+/).forEach(line => {
+                        const [key, ...rest] = line.split(': ');
+                        if (key)
+                            map.set(key, rest.join(': '));
+                    });
+                    const headersObject = Object.fromEntries(map);
+                    const resLike = {
+                        ok: xhr.status >= 200 && xhr.status < 300,
+                        status: xhr.status,
+                        statusText: xhr.statusText,
+                        url: xhr.responseURL,
+                        headers: { entries: () => map.entries() },
+                        text: () => Promise.resolve(xhr.responseText),
+                        json: () => Promise.resolve(JSON.parse(xhr.responseText)),
+                        blob: () => Promise.resolve(new Blob([xhr.response])),
+                        arrayBuffer: () => Promise.resolve(new TextEncoder().encode(xhr.responseText).buffer),
+                        bodyUsed: false,
+                        redirected: false,
+                        type: 'basic'
+                    };
+                    resolve({ resLike, headersObject });
+                };
+                xhr.onerror = () => reject(new TypeError('Network request failed'));
+                xhr.ontimeout = () => reject(new TypeError('XMLHttpRequest timeout'));
+                xhr.onabort = () => reject(new DOMException('Aborted', 'AbortError'));
+                xhr.send(reqBody);
             });
-            let data = undefined;
+            const { resLike, headersObject } = xhrResponse;
+            let data;
             try {
-                data = await transformResponse(finalConfig, res);
+                data = await transformResponse(finalConfig, resLike);
             }
-            catch (err) { }
-            const headers = Object.fromEntries(res.headers.entries());
-            if (!res.ok) {
+            catch (_err) { }
+            if (!resLike.ok) {
                 const error = {
-                    ...Object.assign({}, res, {
-                        bodyUsed: res.bodyUsed,
-                        redirected: res.redirected,
-                        status: res.status,
-                        statusText: res.statusText,
-                        type: res.type,
-                        url: res.url,
-                    }, res, {
-                        config: finalConfig,
-                        headers: headers,
-                        data: data
-                    })
+                    ...Object.assign({}, resLike, {
+                        status: resLike.status,
+                        statusText: resLike.statusText,
+                        url: resLike.url,
+                    }),
+                    config: finalConfig,
+                    headers: headersObject,
+                    data
                 };
                 if (this.responseInterceptor) {
                     try {
@@ -62,18 +91,14 @@ export class Pantera {
                 return Promise.reject(error);
             }
             const response = {
-                ...Object.assign({}, res, {
-                    bodyUsed: res.bodyUsed,
-                    redirected: res.redirected,
-                    status: res.status,
-                    statusText: res.statusText,
-                    type: res.type,
-                    url: res.url,
-                }, res, {
-                    config: finalConfig,
-                    headers: headers,
-                    data: data
-                })
+                ...Object.assign({}, resLike, {
+                    status: resLike.status,
+                    statusText: resLike.statusText,
+                    url: resLike.url,
+                }),
+                config: finalConfig,
+                headers: headersObject,
+                data
             };
             if (this.responseInterceptor)
                 return await this.responseInterceptor.onSuccess(response);
