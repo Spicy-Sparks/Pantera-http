@@ -4,17 +4,16 @@ import { mergeUrl } from '../utils/config'
 export const transformUrl = (
   config: PanteraConfig
 ): string => {
-  const finalUrl = mergeUrl(config.url || '', config.baseUrl)
+  let finalUrl = mergeUrl(config.url || '', config.baseUrl)
 
   if(config.params && (Object.keys(config.params).length > 0)) {
-    for (const [key, value] of Object.entries(config.params)) {
-      if (typeof value === 'string') {
-        config.params[key] = encodeURIComponent(value)
-      }
+    if (config.params && (Object.keys(config.params).length > 0)) {
+      const queryString = Object.entries(config.params)
+        .filter(([_, value]) => value !== undefined)
+        .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value!.toString())}`)
+        .join('&')
+      finalUrl = `${finalUrl}?${queryString}`;
     }
-    // @ts-ignore
-    const urlSearchParams = new URLSearchParams(config.params).toString()
-    return `${finalUrl}?${urlSearchParams}`
   }
 
   return finalUrl
