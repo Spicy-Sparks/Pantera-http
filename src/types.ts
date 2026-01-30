@@ -1,3 +1,5 @@
+import { AdapterType } from './adapters/types'
+
 export type ResponseType = 'json' | 'text' | 'blob'
 
 export type PanteraHeaders = {
@@ -20,7 +22,12 @@ export type PanteraConfig = Omit<Omit<Omit<RequestInit, "credentials">, "body">,
   auth?: {
     username: string,
     password: string
-  }
+  },
+  adapter?: AdapterType,
+  timeout?: number,
+  signal?: AbortSignal,
+  onUploadProgress?: (event: ProgressEvent) => void,
+  onDownloadProgress?: (event: ProgressEvent) => void
 }
 
 export type PanteraResponse<T = any> = Omit<Response, "headers"> & {

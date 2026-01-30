@@ -1,9 +1,13 @@
 import { PanteraConfig, PanteraResponseInterceptors, PanteraRequestInterceptors, PanteraResponse } from '../types';
+import { PanteraAdapter, AdapterType } from '../adapters/types';
 export declare class Pantera {
     private baseConfig?;
     private requestInterceptor?;
     private responseInterceptor?;
+    private defaultAdapter;
     constructor(config?: PanteraConfig);
+    setDefaultAdapter: (adapter: AdapterType) => void;
+    getDefaultAdapter: () => PanteraAdapter;
     request: <T = any>(config: PanteraConfig) => Promise<PanteraResponse<T>>;
     get: <T = any>(url: string, config?: PanteraConfig) => Promise<PanteraResponse<T>>;
     post: <T = any>(url: string, config?: PanteraConfig) => Promise<PanteraResponse<T>>;

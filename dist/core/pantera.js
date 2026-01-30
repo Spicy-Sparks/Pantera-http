@@ -5,13 +5,35 @@ import { transformHeaders } from '../transform/headers';
 import { transformCredentials } from '../transform/credentials';
 import { transformResponse } from '../transform/response';
 import { errorToObject } from '../utils/errors';
+import { xhrAdapter } from '../adapters/xhrAdapter';
+import { fetchAdapter } from '../adapters/fetchAdapter';
+const adapterMap = {
+    fetch: fetchAdapter,
+    xhr: xhrAdapter
+};
+function resolveAdapter(adapterConfig, defaultAdapter) {
+    if (!adapterConfig) {
+        return defaultAdapter;
+    }
+    if (typeof adapterConfig === 'string') {
+        return adapterMap[adapterConfig] ?? defaultAdapter;
+    }
+    return adapterConfig;
+}
 export class Pantera {
     baseConfig;
     requestInterceptor;
     responseInterceptor;
+    defaultAdapter = xhrAdapter;
     constructor(config) {
         this.baseConfig = config;
     }
+    setDefaultAdapter = (adapter) => {
+        this.defaultAdapter = resolveAdapter(adapter, this.defaultAdapter);
+    };
+    getDefaultAdapter = () => {
+        return this.defaultAdapter;
+    };
     request = async (config) => {
         let finalConfig = this.baseConfig
             ? mergeConfig(this.baseConfig, config)
@@ -23,86 +45,48 @@ export class Pantera {
         const reqUrl = transformUrl(finalConfig);
         const reqHeaders = transformHeaders(finalConfig, reqBody);
         const reqCredentials = transformCredentials(finalConfig);
+        const adapter = resolveAdapter(finalConfig.adapter, this.defaultAdapter);
+        const adapterParams = {
+            url: reqUrl,
+            method: (finalConfig.method ?? 'GET').toUpperCase(),
+            headers: reqHeaders ?? {},
+            body: reqBody,
+            credentials: reqCredentials ?? 'same-origin',
+            timeout: finalConfig.timeout,
+            signal: finalConfig.signal,
+            responseType: finalConfig.responseType,
+            onUploadProgress: finalConfig.onUploadProgress,
+            onDownloadProgress: finalConfig.onDownloadProgress
+        };
         try {
-            const xhrResponse = await new Promise((resolve, reject) => {
-                const xhr = new XMLHttpRequest();
-                xhr.open((finalConfig.method ?? 'GET').toUpperCase(), reqUrl, true);
-                xhr.withCredentials = reqCredentials === 'include';
-                // if (finalConfig.timeout != null) xhr.timeout = finalConfig.timeout
-                Object.entries(reqHeaders ?? {}).forEach(([k, v]) => {
-                    if (v !== undefined)
-                        xhr.setRequestHeader(k, String(v));
-                });
-                xhr.onload = () => {
-                    const raw = xhr.getAllResponseHeaders();
-                    const map = new Map();
-                    raw.trim().split(/[\r\n]+/).forEach(line => {
-                        const [key, ...rest] = line.split(': ');
-                        if (key)
-                            map.set(key, rest.join(': '));
-                    });
-                    const headersObject = Object.fromEntries(map);
-                    const resLike = {
-                        ok: xhr.status >= 200 && xhr.status < 300,
-                        status: xhr.status,
-                        statusText: xhr.statusText,
-                        url: xhr.responseURL,
-                        headers: { entries: () => map.entries() },
-                        text: () => Promise.resolve(xhr.responseText),
-                        json: () => Promise.resolve(JSON.parse(xhr.responseText)),
-                        blob: () => Promise.resolve(new Blob([xhr.response])),
-                        arrayBuffer: () => Promise.resolve(new TextEncoder().encode(xhr.responseText).buffer),
-                        bodyUsed: false,
-                        redirected: false,
-                        type: 'basic'
-                    };
-                    resolve({ resLike, headersObject });
-                };
-                xhr.onerror = () => reject(new TypeError('Network request failed'));
-                xhr.ontimeout = () => reject(new TypeError('XMLHttpRequest timeout'));
-                xhr.onabort = () => reject(new DOMException('Aborted', 'AbortError'));
-                xhr.send(reqBody);
-            });
-            const { resLike, headersObject } = xhrResponse;
+            const adapterResponse = await adapter.request(adapterParams);
             let data;
             try {
-                data = await transformResponse(finalConfig, resLike);
+                data = await transformResponse(finalConfig, adapterResponse);
             }
-            catch (_err) { }
-            if (!resLike.ok) {
-                const error = {
-                    ...Object.assign({}, resLike, {
-                        status: resLike.status,
-                        statusText: resLike.statusText,
-                        url: resLike.url,
-                    }),
-                    config: finalConfig,
-                    headers: headersObject,
-                    data
-                };
+            catch (_err) {
+                // Response transformation failed, data remains undefined
+            }
+            const baseResponse = {
+                status: adapterResponse.status,
+                statusText: adapterResponse.statusText,
+                url: adapterResponse.url,
+                headers: adapterResponse.headers,
+                config: finalConfig,
+                data
+            };
+            if (!adapterResponse.ok) {
+                const error = baseResponse;
                 if (this.responseInterceptor) {
-                    try {
-                        return await this.responseInterceptor.onError(error);
-                    }
-                    catch (err) {
-                        return Promise.reject(err);
-                    }
+                    return this.responseInterceptor.onError(error);
                 }
                 return Promise.reject(error);
             }
-            const response = {
-                ...Object.assign({}, resLike, {
-                    status: resLike.status,
-                    statusText: resLike.statusText,
-                    url: resLike.url,
-                }),
-                config: finalConfig,
-                headers: headersObject,
-                data
-            };
-            if (this.responseInterceptor)
-                return await this.responseInterceptor.onSuccess(response);
-            return Promise.resolve(response);
+            const response = baseResponse;
+            if (this.responseInterceptor) {
+                return this.responseInterceptor.onSuccess(response);
+            }
+            return response;
         }
         catch (err) {
             const error = {
@@ -110,12 +94,7 @@ export class Pantera {
                 config: finalConfig
             };
             if (this.responseInterceptor) {
-                try {
-                    return await this.responseInterceptor.onError(error);
-                }
-                catch (err) {
-                    return Promise.reject(err);
-                }
+                return this.responseInterceptor.onError(error);
             }
             return Promise.reject(error);
         }
