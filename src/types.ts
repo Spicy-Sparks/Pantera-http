@@ -1,6 +1,6 @@
 import { AdapterType } from './adapters/types'
 
-export type ResponseType = 'json' | 'text' | 'blob'
+export type ResponseType = 'json' | 'text' | 'blob' | 'arraybuffer'
 
 export type PanteraHeaders = {
   [key: string]: string | number | boolean | null | undefined

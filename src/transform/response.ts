@@ -12,6 +12,8 @@ export const transformResponse = async <T>(
       return await response.json() as unknown as T
     case 'blob':
       return await response.blob() as unknown as T
+    case 'arraybuffer':
+      return await response.arrayBuffer() as unknown as T
     case 'text':
     default:
       return await response.text() as unknown as T

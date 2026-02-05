@@ -23,6 +23,7 @@ export const xhrAdapter: PanteraAdapter = {
       credentials,
       timeout,
       signal,
+      responseType,
       onUploadProgress,
       onDownloadProgress
     } = params
@@ -32,6 +33,10 @@ export const xhrAdapter: PanteraAdapter = {
 
       xhr.open(method, url, true)
       xhr.withCredentials = credentials === 'include'
+
+      if (responseType === 'arraybuffer' || responseType === 'blob') {
+        xhr.responseType = responseType
+      }
 
       if (timeout != null) {
         xhr.timeout = timeout
@@ -61,7 +66,9 @@ export const xhrAdapter: PanteraAdapter = {
       }
 
       xhr.onload = () => {
-        const responseText = xhr.responseText
+        const isArrayBuffer = xhr.responseType === 'arraybuffer'
+        const isBlob = xhr.responseType === 'blob'
+        const responseText = isArrayBuffer || isBlob ? '' : xhr.responseText
 
         resolve({
           ok: xhr.status >= 200 && xhr.status < 300,
@@ -71,8 +78,12 @@ export const xhrAdapter: PanteraAdapter = {
           headers: parseRawHeaders(xhr.getAllResponseHeaders()),
           text: () => Promise.resolve(responseText),
           json: () => Promise.resolve(JSON.parse(responseText)),
-          blob: () => Promise.resolve(new Blob([xhr.response])),
-          arrayBuffer: () => Promise.resolve(new TextEncoder().encode(responseText).buffer),
+          blob: () => isBlob
+            ? Promise.resolve(xhr.response as Blob)
+            : Promise.resolve(new Blob([xhr.response])),
+          arrayBuffer: () => isArrayBuffer
+            ? Promise.resolve(xhr.response as ArrayBuffer)
+            : Promise.resolve(new TextEncoder().encode(responseText).buffer),
           redirected: false,
           type: 'basic'
         })

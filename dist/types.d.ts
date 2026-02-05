@@ -1,5 +1,5 @@
 import { AdapterType } from './adapters/types';
-export declare type ResponseType = 'json' | 'text' | 'blob';
+export declare type ResponseType = 'json' | 'text' | 'blob' | 'arraybuffer';
 export declare type PanteraHeaders = {
     [key: string]: string | number | boolean | null | undefined;
 };
