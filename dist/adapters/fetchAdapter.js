@@ -2,7 +2,7 @@ import { parseHeadersToObject } from './types';
 export const fetchAdapter = {
     name: 'fetch',
     async request(params) {
-        const { url, method, headers, body, credentials, timeout, signal } = params;
+        const { url, method, headers, body, credentials, timeout, signal, redirect } = params;
         let timeoutId;
         let abortController;
         if (timeout && !signal) {
@@ -15,7 +15,8 @@ export const fetchAdapter = {
                 headers,
                 body,
                 credentials,
-                signal: signal ?? abortController?.signal
+                signal: signal ?? abortController?.signal,
+                ...(redirect && { redirect })
             });
             const clonedResponse = response.clone();
             return {

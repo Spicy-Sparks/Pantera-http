@@ -4,7 +4,7 @@ export const fetchAdapter: PanteraAdapter = {
   name: 'fetch',
 
   async request(params: AdapterRequestParams): Promise<AdapterResponse> {
-    const { url, method, headers, body, credentials, timeout, signal } = params
+    const { url, method, headers, body, credentials, timeout, signal, redirect } = params
 
     let timeoutId: ReturnType<typeof setTimeout> | undefined
     let abortController: AbortController | undefined
@@ -20,7 +20,8 @@ export const fetchAdapter: PanteraAdapter = {
         headers,
         body,
         credentials,
-        signal: signal ?? abortController?.signal
+        signal: signal ?? abortController?.signal,
+        ...(redirect && { redirect })
       })
 
       const clonedResponse = response.clone()

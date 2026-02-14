@@ -8,6 +8,7 @@ export interface AdapterRequestParams {
   credentials: RequestCredentials
   timeout?: number
   signal?: AbortSignal
+  redirect?: RequestRedirect
   responseType?: ResponseType
   onUploadProgress?: (event: ProgressEvent) => void
   onDownloadProgress?: (event: ProgressEvent) => void

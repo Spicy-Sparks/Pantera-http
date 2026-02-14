@@ -54,6 +54,7 @@ export class Pantera {
             credentials: reqCredentials ?? 'same-origin',
             timeout: finalConfig.timeout,
             signal: finalConfig.signal,
+            redirect: finalConfig.redirect,
             responseType: finalConfig.responseType,
             onUploadProgress: finalConfig.onUploadProgress,
             onDownloadProgress: finalConfig.onDownloadProgress
