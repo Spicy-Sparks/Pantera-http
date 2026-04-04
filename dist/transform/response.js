@@ -1,5 +1,5 @@
 export const transformResponse = async (config, response) => {
-    if (response.bodyUsed)
+    if (response.bodyUsed || response.status === 204)
         return;
     switch (config.responseType) {
         case 'json':

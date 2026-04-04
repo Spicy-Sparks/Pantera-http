@@ -4,7 +4,7 @@ export const transformResponse = async <T>(
   config: PanteraConfig,
   response: Response
 ): Promise<T | undefined> => {
-  if(response.bodyUsed)
+  if(response.bodyUsed || response.status === 204)
     return
 
   switch (config.responseType) {
